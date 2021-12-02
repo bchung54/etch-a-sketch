@@ -13,16 +13,33 @@ function addNElements(n, node) {
 
             const newNewDiv = document.createElement('div');
             newNewDiv.classList.add('childDiv');
+            newNewDiv.style.backgroundColor = 'rgb(100%, 100%, 100%)';
 
             // add mouseover color change to new div
             newNewDiv.addEventListener('mouseover', function(e) {
-                e.target.setAttribute('style', 'background-color:black;')
+                e.target.setAttribute('style', `background-color: ${rgb10(e.target.style.backgroundColor)};`);
             });
 
             newDiv.appendChild(newNewDiv);
         }
         node.appendChild(newDiv);
     }
+}
+
+function rgb10 (color) {
+    var rgb = color.replace(/[^\d,]/g, '').split(',');
+    var red = parseInt(rgb[0]);
+    var green = parseInt(rgb[1]);
+    var blue = parseInt(rgb[2]);
+    return `rgb(${red - 25}, ${green - 25}, ${blue - 25})`;
+}
+
+function rgbRandom() {
+
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    return `rgb(${r}, ${g}, ${b})`;
 }
 
 function reset() {
