@@ -1,5 +1,8 @@
-const N = 16;
+let N = 16;
 
+// Core functionality
+//
+// Create grid
 function addNElements(n, node) {
 
     // loop to create n div elements and append as child to node
@@ -26,6 +29,34 @@ function addNElements(n, node) {
     }
 }
 
+// Clear grid
+function clear() {
+
+    // removes all child nodes of main container
+    while (screen.firstChild) {
+        screen.removeChild(screen.firstChild);
+    }
+
+    // create grid with user input number as the squares per side
+    addNElements(N, screen);
+}
+
+// Resize grid
+function resize() {
+    // removes all child nodes of main container
+    while (screen.firstChild) {
+        screen.removeChild(screen.firstChild);
+    }
+
+    N = input();
+
+    // create grid with user input number as the squares per side
+    addNElements(N, screen);
+}
+
+// Color and intensity functionality
+//
+// Random RGB
 function rgb10 (color) {
     var rgb = color.replace(/[^\d,]/g, '').split(',');
     var red = parseInt(rgb[0]);
@@ -40,21 +71,6 @@ function rgbRandom() {
     const g = Math.floor(Math.random() * 255);
     const b = Math.floor(Math.random() * 255);
     return `rgb(${r}, ${g}, ${b})`;
-}
-
-function reset() {
-
-    // removes all child nodes of main container
-    while (container.firstChild) {
-        container.removeChild(container.firstChild);
-    }
-
-    // prompt user for number of squares per side and validate input
-    const userN = input();
-
-    // create grid with user input number as the squares per side
-    addNElements(userN, container);
-    
 }
 
 function input() {
@@ -76,16 +92,13 @@ function input() {
     return output;
 }
 
-// create main container for all of the divs and give it an id
-const container = document.createElement('div');
-container.setAttribute('id', 'container');
+// add function to resize button
+const resizeButton = document.querySelector('#resize');
+resizeButton.addEventListener('click', resize);
 
-// add reset button to top of screen
-const resetButton = document.getElementById('reset-button');
-resetButton.addEventListener('click', reset);
+// add function to clear button
+const clearButton = document.querySelector('#clear');
+clearButton.addEventListener('click', clear);
 
-// create the grid and append to contianer
-addNElements(N, container);
-
-// append container to the body of html
-document.body.appendChild(container);
+// create the grid and append to container
+addNElements(N, document.querySelector('#screen'));
