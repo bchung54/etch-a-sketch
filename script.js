@@ -1,9 +1,11 @@
 let N = 16;
+let I = 20; // percent to intensify mark on each pass
+let C = 'random'; // black, random, rgb
 
 // Core functionality
 //
 // Create grid
-function addNElements(n, node) {
+function addNElements(node, n, color, intensity) {
 
     // loop to create n div elements and append as child to node
     for (let i = 0; i < n; i++) {
@@ -16,11 +18,12 @@ function addNElements(n, node) {
 
             const newNewDiv = document.createElement('div');
             newNewDiv.classList.add('childDiv');
+
             newNewDiv.style.backgroundColor = 'rgb(100%, 100%, 100%)';
 
             // add mouseover color change to new div
             newNewDiv.addEventListener('mouseover', function(e) {
-                e.target.setAttribute('style', `background-color: ${rgb10(e.target.style.backgroundColor)};`);
+                e.target.setAttribute('style', `background-color: ${rgbIntensify(e.target.style.backgroundColor, color, intensity)};`);
             });
 
             newDiv.appendChild(newNewDiv);
@@ -38,7 +41,7 @@ function clear() {
     }
 
     // create grid with user input number as the squares per side
-    addNElements(N, screen);
+    addNElements(screen, N, C, I);
 }
 
 // Resize grid
@@ -51,18 +54,30 @@ function resize() {
     N = input();
 
     // create grid with user input number as the squares per side
-    addNElements(N, screen);
+    addNElements(screen, N, C, I);
 }
 
 // Color and intensity functionality
 //
-// Random RGB
-function rgb10 (color) {
-    var rgb = color.replace(/[^\d,]/g, '').split(',');
-    var red = parseInt(rgb[0]);
-    var green = parseInt(rgb[1]);
-    var blue = parseInt(rgb[2]);
-    return `rgb(${red - 25}, ${green - 25}, ${blue - 25})`;
+// Intensifies color by 10%
+function rgbIntensify (currColor, settingColor, percent) {
+    const rgb = currColor.replace(/[^\d,]/g, '').split(',');
+    const red = parseInt(rgb[0]);
+    const green = parseInt(rgb[1]);
+    const blue = parseInt(rgb[2]);
+    const interval = 255 * (percent / 100);
+
+    if (settingColor == 'black') {
+        return `rgb(${red - interval}, ${green - interval}, ${blue - interval})`;
+    } else if (settingColor == 'red') {
+        return `rgb(${red}, ${green - interval}, ${blue - interval})`;
+    } else if (settingColor == 'green') {
+        return `rgb(${red - interval}, ${green}, ${blue - interval})`;
+    } else if (settingColor == 'blue') {
+        return `rgb(${red - interval}, ${green - interval}, ${blue})`;
+    } else if (settingColor == 'random') {
+        return rgbRandom();
+    }
 }
 
 function rgbRandom() {
@@ -101,4 +116,5 @@ const clearButton = document.querySelector('#clear');
 clearButton.addEventListener('click', clear);
 
 // create the grid and append to container
-addNElements(N, document.querySelector('#screen'));
+const screen = document.querySelector('#screen');
+addNElements(screen, N, C, I);
