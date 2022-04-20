@@ -12,21 +12,61 @@
     <div id="case">
         <div id="screen"></div>
         <div id="ui-container">
-            <div class="circle">
-                <div class="notch" id="color-dial"></div>
-            </div> <!-- black, random, rgb, -->
+            <div class="circle-container">
+                <div class="marker-container">
+                    <div class="notch-marker" id="color-marker-0"></div>
+                </div>
+
+                <div class="marker-container center-marker-container">
+                    <div class="notch-marker" id="color-marker-1"></div>
+
+                    <div class="circle" id="color-circle">
+                        <div class="notch pos0" id="color-dial"></div>
+                        <div class="label">Color
+                            <hr>
+                            <div class="color-value">Black</div>
+                        </div>
+                    </div>
+
+                    <div class="notch-marker" id="color-marker-2"></div>
+                </div>
+
+                <div class="marker-container">
+                    <div class="notch-marker" id="color-marker-3"></div>
+                </div>
+            </div>
         
             <div id="mid-ui-container">
-                <div id="title">Etch - A - Sketch</div> <!-- find a fancy font -->
+                <div id="title">Etch - A - Sketch</div>
                 <div id="btn-container">
                     <button id="resize">Resize</button>
                     <button id="clear">Clear</button>
                 </div>
             </div>
         
-            <div class="circle">
-                <div class="notch" id="intensity-dial"></div>
-            </div> <!-- 10%, 20%, 25%, 50%, 100% -->
+            <div class="circle-container">
+                <div class="marker-container">
+                    <div class="notch-marker" id="saturation-marker-0"></div>
+                </div>
+
+                <div class="marker-container center-marker-container">
+                    <div class="notch-marker" id="saturation-marker-1"></div>
+
+                    <div class="circle" id="intensity-circle">
+                        <div class="notch pos0" id="intensity-dial"></div>
+                        <div class="label">Saturation
+                            <hr>
+                            <div class="saturation-value">10%</div>
+                        </div>
+                    </div>
+
+                    <div class="notch-marker" id="saturation-marker-2"></div>
+                </div>
+
+                <div class="marker-container">
+                    <div class="notch-marker" id="saturation-marker-3"></div>
+                </div>
+            </div>
         </div>
     </div>
 </body>

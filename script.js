@@ -1,6 +1,6 @@
 let N = 16;
-let I = 20; // percent to intensify mark on each pass
-let C = 'random'; // black, random, rgb
+let I = 10; // percent to intensify mark on each pass
+var C = 'black'; // black, random, rgb
 
 // Core functionality
 //
@@ -67,17 +67,19 @@ function rgbIntensify (currColor, settingColor, percent) {
     const blue = parseInt(rgb[2]);
     const interval = 255 * (percent / 100);
 
-    if (settingColor == 'black') {
-        return `rgb(${red - interval}, ${green - interval}, ${blue - interval})`;
-    } else if (settingColor == 'red') {
+    if (settingColor == 'red') {
         return `rgb(${red}, ${green - interval}, ${blue - interval})`;
     } else if (settingColor == 'green') {
         return `rgb(${red - interval}, ${green}, ${blue - interval})`;
     } else if (settingColor == 'blue') {
         return `rgb(${red - interval}, ${green - interval}, ${blue})`;
-    } else if (settingColor == 'random') {
-        return rgbRandom();
-    }
+    } else {
+        if (settingColor == 'random' && red == 255 && green == 255 && blue == 255) {
+            return rgbRandom();
+        } else {
+            return `rgb(${red - interval}, ${green - interval}, ${blue - interval})`
+        };
+    };
 }
 
 function rgbRandom() {
@@ -118,3 +120,61 @@ clearButton.addEventListener('click', clear);
 // create the grid and append to container
 const screen = document.querySelector('#screen');
 addNElements(screen, N, C, I);
+
+const colorNotch = document.querySelector('#color-dial');
+const intensityNotch = document.querySelector('#intensity-dial');
+function turnDial(notch) {
+    const notchLabel = notch.getAttribute('id');
+    console.log(notchLabel);
+    const posClass = notch.classList[1];
+    const currPos = posClass.substring(3);
+    const newPos = (parseInt(currPos) + 1) % 4;
+
+    notch.classList.remove(posClass);
+    notch.classList.add(`pos${newPos}`);
+
+    switch (notchLabel) {
+        case 'color-dial':
+            switch (newPos) {
+                case 0:
+                    C = 'black';
+                    break;
+                case 1:
+                    C = 'red';
+                    break;
+                case 2:
+                    C = 'blue';
+                    break;
+                case 3:
+                    C = 'random';
+                    break;
+            };
+            document.querySelector('.color-value').textContent = C[0].toUpperCase() + C.slice(1);
+            break;
+        case 'intensity-dial':
+            switch (newPos) {
+                case 0:
+                    I = 10;
+                    break;
+                case 1:
+                    I = 25;
+                    break;
+                case 2:
+                    I = 50;
+                    break;
+                case 3:
+                    I = 100;
+                    break;
+            };
+            document.querySelector('.saturation-value').textContent = I.toString() + '%';
+            break;
+    };
+
+    clear();
+}
+
+const notches = document.querySelectorAll('.notch');
+notches.forEach(notch => notch.addEventListener('click', function(e){
+    console.log(e.target);
+    turnDial(e.target);
+}));
