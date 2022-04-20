@@ -1,47 +1,49 @@
-let N = 16;
-let I = 10; // percent to intensify mark on each pass
-var C = 'black'; // black, random, rgb
+// Defaults
+var N = 16; // number of cells per side in screen
+var S = 10; // percent to increase saturation on each pass
+var C = 'black'; // black, red, blue, random
 
-// Core functionality
+// Grid functionality
 //
-// Create grid
-function addNElements(node, n, color, intensity) {
+// Create grid and appends to node
+function addNElements(node, n, color, saturation) {
+    // parameters: node to add cells to, number of cells per side, color setting, saturation setting
+    // output: none
 
     // loop to create n div elements and append as child to node
     for (let i = 0; i < n; i++) {
         
-        const newDiv = document.createElement('div');
-        newDiv.classList.add('colDiv');
+        // create column for cells
+        const column = document.createElement('div');
+        column.classList.add('column');
         
         // loop to create another n div elements and append as child to create grid
         for (let i = 0; i < n; i++) {
 
-            const newNewDiv = document.createElement('div');
-            newNewDiv.classList.add('childDiv');
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
 
-            newNewDiv.style.backgroundColor = 'rgb(100%, 100%, 100%)';
+            cell.style.backgroundColor = 'rgb(100%, 100%, 100%)';
 
             // add mouseover color change to new div
-            newNewDiv.addEventListener('mouseover', function(e) {
-                e.target.setAttribute('style', `background-color: ${rgbIntensify(e.target.style.backgroundColor, color, intensity)};`);
+            cell.addEventListener('mouseover', function(e) {
+                e.target.setAttribute('style', `background-color: ${rgbIntensify(e.target.style.backgroundColor, color, saturation)};`);
             });
 
-            newDiv.appendChild(newNewDiv);
+            column.appendChild(cell);
         }
-        node.appendChild(newDiv);
+        node.appendChild(column);
     }
 }
 
 // Clear grid
 function clear() {
-
     // removes all child nodes of main container
     while (screen.firstChild) {
         screen.removeChild(screen.firstChild);
     }
-
-    // create grid with user input number as the squares per side
-    addNElements(screen, N, C, I);
+    // recreate grid with current number of the cells per side
+    addNElements(screen, N, C, S);
 }
 
 // Resize grid
@@ -50,17 +52,48 @@ function resize() {
     while (screen.firstChild) {
         screen.removeChild(screen.firstChild);
     }
-
     N = input();
-
-    // create grid with user input number as the squares per side
-    addNElements(screen, N, C, I);
+    // create grid with user input number as the cells per side
+    addNElements(screen, N, C, S);
 }
 
-// Color and intensity functionality
+// Button functionality
 //
-// Intensifies color by 10%
+// Add function to resize button
+const resizeButton = document.querySelector('#resize');
+resizeButton.addEventListener('click', resize);
+
+// Add function to clear button
+const clearButton = document.querySelector('#clear');
+clearButton.addEventListener('click', clear);
+
+// resize: helper function
+function input() {
+    // parameters: none
+    // output: number from user input
+    // validates input for integer between 1-100
+
+    // give output a starting value of N (default N = 16)
+    let output = N;
+
+    do {
+        let promptMessage = "Enter number of cells per side for the new grid (integers only): ";
+        if (isNaN(output) | output < 1 | output > 100) {
+            promptMessage = "Please enter an integer between 1 and 100 (inclusive)!";
+        }
+        output = parseInt(prompt(promptMessage));
+    } while (isNaN(output) | output < 1 | output > 100);
+
+    return output;
+}
+
+// Color and saturation functionality
+//
+// Intensifies color by saturation settings (default saturation is 10%)
 function rgbIntensify (currColor, settingColor, percent) {
+    // parameters: current color, new setting color, percent saturation
+    // output: string containing new  rgb value
+
     const rgb = currColor.replace(/[^\d,]/g, '').split(',');
     const red = parseInt(rgb[0]);
     const green = parseInt(rgb[1]);
@@ -82,7 +115,10 @@ function rgbIntensify (currColor, settingColor, percent) {
     };
 }
 
+// Provides random rgb value
 function rgbRandom() {
+    // parameters: none
+    // output: string of random rgb value
 
     const r = Math.floor(Math.random() * 255);
     const g = Math.floor(Math.random() * 255);
@@ -90,49 +126,22 @@ function rgbRandom() {
     return `rgb(${r}, ${g}, ${b})`;
 }
 
-function input() {
-    // takes in user input to be used as the squares per side for new grid
-    // validates input for integer between 1-100
-
-    // default is global N = 16
-    let output = N;
-
-    do {
-        let promptMessage = "Enter number of squares per side for the new grid (integers only): ";
-        if (isNaN(output) | output < 1 | output > 100) {
-            promptMessage = "Please enter an integer between 1 and 100 (inclusive)!";
-        }
-        output = parseInt(prompt(promptMessage));
-
-    } while (isNaN(output) | output < 1 | output > 100);
-    
-    return output;
-}
-
-// add function to resize button
-const resizeButton = document.querySelector('#resize');
-resizeButton.addEventListener('click', resize);
-
-// add function to clear button
-const clearButton = document.querySelector('#clear');
-clearButton.addEventListener('click', clear);
-
-// create the grid and append to container
-const screen = document.querySelector('#screen');
-addNElements(screen, N, C, I);
-
-const colorNotch = document.querySelector('#color-dial');
-const intensityNotch = document.querySelector('#intensity-dial');
+// Dial functionality for color and saturation controls
 function turnDial(notch) {
+    // parameters: notch element
+    // output: none
+    // changes settings for color and saturation when dial is turned
+
     const notchLabel = notch.getAttribute('id');
-    console.log(notchLabel);
     const posClass = notch.classList[1];
     const currPos = posClass.substring(3);
     const newPos = (parseInt(currPos) + 1) % 4;
-
+    
+    // switches notch class
     notch.classList.remove(posClass);
     notch.classList.add(`pos${newPos}`);
 
+    // switches settings and displays new setting
     switch (notchLabel) {
         case 'color-dial':
             switch (newPos) {
@@ -151,30 +160,33 @@ function turnDial(notch) {
             };
             document.querySelector('.color-value').textContent = C[0].toUpperCase() + C.slice(1);
             break;
-        case 'intensity-dial':
+        case 'saturation-dial':
             switch (newPos) {
                 case 0:
-                    I = 10;
+                    S = 10;
                     break;
                 case 1:
-                    I = 25;
+                    S = 25;
                     break;
                 case 2:
-                    I = 50;
+                    S = 50;
                     break;
                 case 3:
-                    I = 100;
+                    S = 100;
                     break;
             };
-            document.querySelector('.saturation-value').textContent = I.toString() + '%';
+            document.querySelector('.saturation-value').textContent = S.toString() + '%';
             break;
     };
 
+    // resets grid with new settings
     clear();
 }
 
+// add turnDial function to notches
 const notches = document.querySelectorAll('.notch');
-notches.forEach(notch => notch.addEventListener('click', function(e){
-    console.log(e.target);
-    turnDial(e.target);
-}));
+notches.forEach(notch => notch.addEventListener('click', function(e) {turnDial(e.target)}));
+
+// create the grid and append to container
+const screen = document.querySelector('#screen');
+addNElements(screen, N, C, S);

@@ -17,18 +17,6 @@ body {
     background-color: white;
 }
 
-.childDiv {
-    height: 100%;
-    width: 100%;
-    flex: 1;
-}
-
-.colDiv {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
 #case {
     display: flex;
     flex-direction: column;
@@ -55,15 +43,27 @@ body {
     overflow: hidden;
 }
 
-button {
-    font-family: ReginaScript;
-    font-size: 38px;
+.column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.cell {
+    height: 100%;
+    width: 100%;
+    flex: 1;
 }
 
 #ui-container {
     display: flex;
     width: 90%;
     justify-content: space-between;
+}
+
+.circle-container {
+    display: flex;
+    flex-direction: column;
 }
 
 .circle {
@@ -73,6 +73,16 @@ button {
     background-color: white;
     border-radius: 75px;
     border: 3px solid black;
+}
+
+.marker-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-marker-container {
+    justify-content: space-around;
 }
 
 #title {
@@ -85,6 +95,11 @@ button {
 #btn-container {
     display: flex;
     justify-content: space-around;
+}
+
+button {
+    font-family: ReginaScript;
+    font-size: 38px;
 }
 
 .notch {
@@ -129,21 +144,6 @@ button {
     background: white;
     position: relative;
     margin: 5px;
-}
-
-.circle-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.marker-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.center-marker-container {
-    justify-content: space-around;
 }
 
 .label {
