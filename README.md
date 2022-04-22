@@ -3,6 +3,8 @@ Digital recreation of the classic Etch-A-Sketch toy with modern controls and set
 
 [Live Preview](https://bchung54.github.io/etch-a-sketch/)
 
+![Etch A Sketch screenshot](./etchsketchscreen.png)
+
 # Journey Through the TOP: My Web Dev Journey [(The Odin Project)](https://theodinproject.com/)
 
 [Project #1: Recipes](https://github.com/bchung54/odin-recipes) [HTML]
